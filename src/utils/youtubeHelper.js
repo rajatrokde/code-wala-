@@ -31,6 +31,28 @@ export function parseYouTubeUrl(url) {
 
 export const YOUTUBE_PRESETS = [
   {
+    id: 'yt-custom-user-playlist',
+    title: 'Featured Vibe YouTube Playlist 🎧',
+    artist: 'Custom Playlist',
+    category: 'YouTube Playlist',
+    isYouTube: true,
+    playlistId: 'PLd4q-VnVZY_A',
+    cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&auto=format&fit=crop&q=80',
+    url: 'https://youtube.com/playlist?list=PLd4q-VnVZY_A',
+    duration: 'PLAYLIST 🎶'
+  },
+  {
+    id: 'yt-sambata-maaz',
+    title: 'MAAZ — SAMBATA (Prod. by Zerochill)',
+    artist: 'SAMBATA',
+    category: 'Hip-Hop / Vibe',
+    isYouTube: true,
+    youtubeId: 'wIL7KzTLxXU',
+    cover: 'https://img.youtube.com/vi/wIL7KzTLxXU/hqdefault.jpg',
+    url: 'https://www.youtube.com/watch?v=wIL7KzTLxXU',
+    duration: '3:15'
+  },
+  {
     id: 'yt-lofigirl',
     title: 'Lofi Girl — Beats to Relax/Study to',
     artist: 'Lofi Girl (YouTube Live)',
