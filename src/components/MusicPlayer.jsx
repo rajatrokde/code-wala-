@@ -10,7 +10,9 @@ import {
   Repeat, 
   Shuffle,
   Disc,
-  Youtube
+  Youtube,
+  Tv,
+  X
 } from 'lucide-react';
 
 export default function MusicPlayer({ 
@@ -29,6 +31,7 @@ export default function MusicPlayer({
   const [isMuted, setIsMuted] = useState(false);
   const [isShuffle, setIsShuffle] = useState(false);
   const [isLoop, setIsLoop] = useState(false);
+  const [showYtVideo, setShowYtVideo] = useState(false);
 
   // Sync HTML5 Audio element with play/pause state
   useEffect(() => {
@@ -83,17 +86,20 @@ export default function MusicPlayer({
 
   const getYouTubeEmbedUrl = () => {
     if (!currentTrack.isYouTube) return '';
-    let baseUrl = 'https://www.youtube.com/embed/';
-    if (currentTrack.youtubeId) {
-      baseUrl += `${currentTrack.youtubeId}?autoplay=${isPlaying ? 1 : 0}&enablejsapi=1`;
+    
+    // Priority: If playlistId exists, use videoseries or video with playlist
+    if (currentTrack.playlistId && currentTrack.youtubeId) {
+      return `https://www.youtube.com/embed/${currentTrack.youtubeId}?list=${currentTrack.playlistId}&autoplay=${isPlaying ? 1 : 0}&enablejsapi=1`;
     } else if (currentTrack.playlistId) {
-      baseUrl += `videoseries?list=${currentTrack.playlistId}&autoplay=${isPlaying ? 1 : 0}&enablejsapi=1`;
+      return `https://www.youtube.com/embed/videoseries?list=${currentTrack.playlistId}&autoplay=${isPlaying ? 1 : 0}&enablejsapi=1`;
+    } else if (currentTrack.youtubeId) {
+      return `https://www.youtube.com/embed/${currentTrack.youtubeId}?autoplay=${isPlaying ? 1 : 0}&enablejsapi=1`;
     }
-    return baseUrl;
+    return '';
   };
 
   return (
-    <div className="w-full flex justify-center px-4 pb-6 z-30 select-none">
+    <div className="w-full flex justify-center px-4 pb-6 z-30 select-none relative">
       
       {/* Native MP3 Audio Player */}
       {!currentTrack.isYouTube && (
@@ -112,8 +118,35 @@ export default function MusicPlayer({
         />
       )}
 
-      {/* Hidden YouTube Embed Player when playing a YouTube track */}
-      {currentTrack.isYouTube && (
+      {/* Floating Picture-in-Picture / Popout YouTube Video Player Modal when active */}
+      {currentTrack.isYouTube && showYtVideo && (
+        <div className="fixed bottom-28 right-6 z-50 glass-panel p-2 rounded-2xl border border-red-500/40 shadow-2xl animate-in fade-in zoom-in duration-200">
+          <div className="flex items-center justify-between px-2 pb-2">
+            <span className="text-xs font-bold text-red-400 flex items-center gap-1.5 font-mono">
+              <Youtube className="w-3.5 h-3.5" /> YouTube Live Video & Playlist
+            </span>
+            <button
+              onClick={() => setShowYtVideo(false)}
+              className="p-1 rounded-full text-zinc-400 hover:text-white hover:bg-white/10"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          <iframe
+            key={currentTrack.id + (isPlaying ? '-play' : '-pause')}
+            width="320"
+            height="180"
+            className="rounded-xl border border-white/10"
+            src={getYouTubeEmbedUrl()}
+            title={currentTrack.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      )}
+
+      {/* Hidden YouTube Embed Player when video modal is minimized */}
+      {currentTrack.isYouTube && !showYtVideo && (
         <div className="hidden">
           <iframe
             key={currentTrack.id + (isPlaying ? '-play' : '-pause')}
@@ -143,7 +176,11 @@ export default function MusicPlayer({
                 />
               </div>
               {currentTrack.isYouTube ? (
-                <div className="absolute inset-0 rounded-full flex items-center justify-center bg-red-600/70 opacity-90">
+                <div 
+                  onClick={() => setShowYtVideo(!showYtVideo)}
+                  className="absolute inset-0 rounded-full flex items-center justify-center bg-red-600/80 cursor-pointer hover:scale-105 transition-transform"
+                  title="Toggle YouTube Video View"
+                >
                   <Youtube className="w-5 h-5 text-white" />
                 </div>
               ) : (
@@ -173,6 +210,19 @@ export default function MusicPlayer({
           {/* Controls & Volume */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             
+            {/* Toggle YouTube Video Display Button */}
+            {currentTrack.isYouTube && (
+              <button
+                onClick={() => setShowYtVideo(!showYtVideo)}
+                title={showYtVideo ? "Hide YouTube Video View" : "Show YouTube Video & Playlist View"}
+                className={`p-2 rounded-full text-xs transition-all cursor-pointer ${
+                  showYtVideo ? 'text-red-400 bg-red-500/20 border border-red-500/40 shadow-lg' : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                <Tv className="w-4 h-4" />
+              </button>
+            )}
+
             <button
               onClick={() => setIsShuffle(!isShuffle)}
               title="Shuffle Playlist"
