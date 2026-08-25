@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dev-vibes-config
+  namespace: dev-vibes
+  labels:
+    app: dev-vibes
+data:
+  APP_ENV: "production"
+  APP_NAME: "Code & Sukoon"
