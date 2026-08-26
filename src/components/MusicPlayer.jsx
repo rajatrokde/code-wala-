@@ -33,9 +33,28 @@ export default function MusicPlayer({
   const [isLoop, setIsLoop] = useState(false);
   const [showYtVideo, setShowYtVideo] = useState(false);
 
+  const iframeRef = useRef(null);
+
+  const postYouTubeCommand = (func, args = '') => {
+    try {
+      if (iframeRef.current && iframeRef.current.contentWindow) {
+        iframeRef.current.contentWindow.postMessage(JSON.stringify({
+          event: 'command',
+          func: func,
+          args: args
+        }), '*');
+      }
+    } catch (e) {
+      console.warn("YouTube postMessage error:", e);
+    }
+  };
+
   // Sync HTML5 Audio element with play/pause state for standard MP3 tracks
   useEffect(() => {
-    if (currentTrack.isYouTube) return;
+    if (currentTrack.isYouTube) {
+      postYouTubeCommand(isPlaying ? 'playVideo' : 'pauseVideo');
+      return;
+    }
 
     if (!audioRef.current) return;
     if (isPlaying) {
@@ -64,13 +83,33 @@ export default function MusicPlayer({
   const handleSeek = (e) => {
     const newTime = parseFloat(e.target.value);
     setCurrentTime(newTime);
-    if (audioRef.current) {
+    if (!currentTrack.isYouTube && audioRef.current) {
       audioRef.current.currentTime = newTime;
+    } else if (currentTrack.isYouTube) {
+      postYouTubeCommand('seekTo', [newTime, true]);
     }
   };
 
   const togglePlay = () => {
-    setIsPlaying(!isPlaying);
+    const nextState = !isPlaying;
+    setIsPlaying(nextState);
+    if (currentTrack.isYouTube) {
+      postYouTubeCommand(nextState ? 'playVideo' : 'pauseVideo');
+    }
+  };
+
+  const handleNext = () => {
+    if (currentTrack.isYouTube && currentTrack.playlistId) {
+      postYouTubeCommand('nextVideo');
+    }
+    onNextTrack(isShuffle);
+  };
+
+  const handlePrev = () => {
+    if (currentTrack.isYouTube && currentTrack.playlistId) {
+      postYouTubeCommand('previousVideo');
+    }
+    onPrevTrack();
   };
 
   const toggleMute = () => {
@@ -87,7 +126,6 @@ export default function MusicPlayer({
   const getYouTubeEmbedUrl = () => {
     if (!currentTrack.isYouTube) return '';
     
-    // Priority: If playlistId exists, use videoseries or video with playlist
     if (currentTrack.playlistId && currentTrack.youtubeId) {
       return `https://www.youtube.com/embed/${currentTrack.youtubeId}?list=${currentTrack.playlistId}&autoplay=${isPlaying ? 1 : 0}&enablejsapi=1`;
     } else if (currentTrack.playlistId) {
@@ -99,10 +137,14 @@ export default function MusicPlayer({
   };
 
   const handleSeekOffset = (seconds) => {
-    if (audioRef.current && !currentTrack.isYouTube) {
+    if (!currentTrack.isYouTube && audioRef.current) {
       const newTime = Math.max(0, Math.min(duration || 100, audioRef.current.currentTime + seconds));
       audioRef.current.currentTime = newTime;
       setCurrentTime(newTime);
+    } else if (currentTrack.isYouTube) {
+      const newTime = Math.max(0, currentTime + seconds);
+      setCurrentTime(newTime);
+      postYouTubeCommand('seekTo', [newTime, true]);
     }
   };
 
@@ -126,7 +168,7 @@ export default function MusicPlayer({
         />
       )}
 
-      {/* Persistent Single YouTube Embed Player (Zero unmounting on toggle) */}
+      {/* Persistent Single YouTube Embed Player */}
       {currentTrack.isYouTube && (
         <div className={`fixed transition-all duration-300 z-50 ${
           showYtVideo 
@@ -147,6 +189,7 @@ export default function MusicPlayer({
             </div>
           )}
           <iframe
+            ref={iframeRef}
             key={currentTrack.id + '-' + (currentTrack.youtubeId || currentTrack.playlistId || '')}
             width={showYtVideo ? "320" : "1"}
             height={showYtVideo ? "180" : "1"}
@@ -233,7 +276,7 @@ export default function MusicPlayer({
             </button>
 
             <button
-              onClick={onPrevTrack}
+              onClick={handlePrev}
               title="Previous Track"
               className="p-2 rounded-full text-zinc-300 hover:text-white transition-colors cursor-pointer hover:bg-white/5 active:scale-95"
             >
@@ -250,7 +293,7 @@ export default function MusicPlayer({
             </button>
 
             <button
-              onClick={() => onNextTrack(isShuffle)}
+              onClick={handleNext}
               title="Next Track (N)"
               className="p-2 rounded-full text-zinc-300 hover:text-white transition-colors cursor-pointer hover:bg-white/5 active:scale-95"
             >
