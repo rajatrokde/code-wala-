@@ -30,7 +30,7 @@ export function parseYouTubeUrl(url) {
 export const MAIN_YOUTUBE_PLAYLIST = {
   id: 'yt-main-user-playlist',
   title: '▶️ Play Full YouTube Playlist Series',
-  artist: 'PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn',
+  artist: 'Full YouTube Playlist (PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn)',
   category: 'Full Playlist',
   isYouTube: true,
   playlistId: 'PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn',
@@ -39,14 +39,14 @@ export const MAIN_YOUTUBE_PLAYLIST = {
   duration: 'ALL SONGS 🎶'
 };
 
-// Playlist tracks listed individual song by song
+// All songs inside the playlist listed individually song by song
 export const YOUTUBE_PRESETS = [
   MAIN_YOUTUBE_PLAYLIST,
   {
-    id: 'yt-sambata-maaz',
-    title: '🎵 1. MAAZ — SAMBATA (Prod. by Zerochill)',
+    id: 'yt-song-1',
+    title: '1. MAAZ — SAMBATA (Prod. by Zerochill)',
     artist: 'SAMBATA',
-    category: 'Playlist Song #1',
+    category: 'Playlist Song 1',
     isYouTube: true,
     youtubeId: 'wIL7KzTLxXU',
     playlistId: 'PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn',
@@ -55,10 +55,10 @@ export const YOUTUBE_PRESETS = [
     duration: '3:15'
   },
   {
-    id: 'yt-lofigirl',
-    title: '🎵 2. Lofi Girl — Beats to Relax/Study to',
+    id: 'yt-song-2',
+    title: '2. Lofi Girl — Beats to Relax/Study to',
     artist: 'Lofi Girl',
-    category: 'Playlist Song #2',
+    category: 'Playlist Song 2',
     isYouTube: true,
     youtubeId: 'jfKfPfyJRdk',
     playlistId: 'PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn',
@@ -67,10 +67,10 @@ export const YOUTUBE_PRESETS = [
     duration: 'LIVE 🔴'
   },
   {
-    id: 'yt-synthwave',
-    title: '🎵 3. Synthwave Radio 24/7 Chill Synth',
+    id: 'yt-song-3',
+    title: '3. Synthwave Radio 24/7 Chill Synth',
     artist: 'Lofi Girl Synthwave',
-    category: 'Playlist Song #3',
+    category: 'Playlist Song 3',
     isYouTube: true,
     youtubeId: '4xDzrJKXOOY',
     playlistId: 'PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn',
@@ -79,15 +79,27 @@ export const YOUTUBE_PRESETS = [
     duration: 'LIVE 🔴'
   },
   {
-    id: 'yt-bollywood',
-    title: '🎵 4. Bollywood Lofi Chill Mix',
+    id: 'yt-song-4',
+    title: '4. Bollywood Lofi Chill Mix',
     artist: 'Retro India Vibe',
-    category: 'Playlist Song #4',
+    category: 'Playlist Song 4',
     isYouTube: true,
     youtubeId: 'N3x6m6S28Hw',
     playlistId: 'PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn',
     cover: 'https://img.youtube.com/vi/N3x6m6S28Hw/hqdefault.jpg',
     url: 'https://www.youtube.com/watch?v=N3x6m6S28Hw',
     duration: '1:45:00'
+  },
+  {
+    id: 'yt-song-5',
+    title: '5. Midnight Code Flow (Chill Lo-Fi Beat)',
+    artist: 'Code & Chill Studio',
+    category: 'Playlist Song 5',
+    isYouTube: true,
+    youtubeId: '5qap5aO4i9A',
+    playlistId: 'PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn',
+    cover: 'https://img.youtube.com/vi/5qap5aO4i9A/hqdefault.jpg',
+    url: 'https://www.youtube.com/watch?v=5qap5aO4i9A',
+    duration: '2:40'
   }
 ];

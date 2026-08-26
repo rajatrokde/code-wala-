@@ -98,6 +98,14 @@ export default function MusicPlayer({
     return '';
   };
 
+  const handleSeekOffset = (seconds) => {
+    if (audioRef.current && !currentTrack.isYouTube) {
+      const newTime = Math.max(0, Math.min(duration || 100, audioRef.current.currentTime + seconds));
+      audioRef.current.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
+  };
+
   return (
     <div className="w-full flex justify-center px-4 pb-6 z-30 select-none relative">
       
@@ -262,7 +270,7 @@ export default function MusicPlayer({
             {/* Playlist Drawer Toggle */}
             <button
               onClick={onOpenPlaylist}
-              title="Open Playlist Drawer & Add YouTube Links"
+              title="Open Playlist Drawer & Songs List"
               className="p-2 rounded-full text-zinc-300 hover:text-white transition-colors cursor-pointer hover:bg-white/5 ml-1 relative"
             >
               <ListMusic className="w-4 h-4 text-amber-400" />
@@ -273,7 +281,14 @@ export default function MusicPlayer({
         </div>
 
         {/* Timeline Progress Bar & Volume */}
-        <div className="flex items-center gap-3 text-[11px] font-mono text-zinc-400">
+        <div className="flex items-center gap-2 sm:gap-3 text-[11px] font-mono text-zinc-400">
+          <button 
+            onClick={() => handleSeekOffset(-10)} 
+            title="Rewind 10 Seconds"
+            className="text-[10px] text-zinc-400 hover:text-emerald-300 px-1.5 py-0.5 rounded glass-pill font-mono cursor-pointer transition-colors"
+          >
+            -10s
+          </button>
           <span>{formatTime(currentTime)}</span>
           
           <div className="relative flex-1 flex items-center">
@@ -288,6 +303,13 @@ export default function MusicPlayer({
           </div>
 
           <span>{currentTrack.isYouTube ? (currentTrack.duration || 'LIVE 🔴') : formatTime(duration)}</span>
+          <button 
+            onClick={() => handleSeekOffset(10)} 
+            title="Forward 10 Seconds"
+            className="text-[10px] text-zinc-400 hover:text-emerald-300 px-1.5 py-0.5 rounded glass-pill font-mono cursor-pointer transition-colors"
+          >
+            +10s
+          </button>
 
           {/* Volume Control */}
           <div className="hidden sm:flex items-center gap-1.5 ml-2">
