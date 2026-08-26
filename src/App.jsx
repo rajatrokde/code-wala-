@@ -24,24 +24,27 @@ export default function App() {
   const [showPlaylist, setShowPlaylist] = useState(false);
   const [showBackgroundPicker, setShowBackgroundPicker] = useState(false);
 
-  // Get all flattened tracks for next/prev navigation
-  const allTracks = PLAYLISTS.flatMap(p => p.tracks);
+  // Get all flattened tracks (YouTube presets + MP3 tracks) for next/prev navigation
+  const allTracks = [...YOUTUBE_PRESETS, ...PLAYLISTS.flatMap(p => p.tracks)];
 
   const handleNextTrack = (isShuffle = false) => {
     if (isShuffle) {
       const randomIdx = Math.floor(Math.random() * allTracks.length);
       setCurrentTrack(allTracks[randomIdx]);
+      setIsPlaying(true);
     } else {
-      const currentIdx = allTracks.findIndex(t => t.id === currentTrack.id);
-      const nextIdx = (currentIdx + 1) % allTracks.length;
+      const currentIdx = allTracks.findIndex(t => t.id === currentTrack.id || (t.playlistId && t.playlistId === currentTrack.playlistId));
+      const nextIdx = currentIdx >= 0 ? (currentIdx + 1) % allTracks.length : 0;
       setCurrentTrack(allTracks[nextIdx]);
+      setIsPlaying(true);
     }
   };
 
   const handlePrevTrack = () => {
-    const currentIdx = allTracks.findIndex(t => t.id === currentTrack.id);
-    const prevIdx = (currentIdx - 1 + allTracks.length) % allTracks.length;
+    const currentIdx = allTracks.findIndex(t => t.id === currentTrack.id || (t.playlistId && t.playlistId === currentTrack.playlistId));
+    const prevIdx = currentIdx >= 0 ? (currentIdx - 1 + allTracks.length) % allTracks.length : 0;
     setCurrentTrack(allTracks[prevIdx]);
+    setIsPlaying(true);
   };
 
   // Keyboard Shortcuts Listener
