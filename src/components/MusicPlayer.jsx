@@ -292,8 +292,7 @@ export default function MusicPlayer({
               max={duration || 100}
               value={currentTime}
               onChange={handleSeek}
-              disabled={currentTrack.isYouTube}
-              className="w-full h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-400 hover:accent-emerald-300 disabled:opacity-50"
+              className="w-full h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-400 hover:accent-emerald-300"
             />
           </div>
 

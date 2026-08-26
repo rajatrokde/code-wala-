@@ -42,7 +42,7 @@ export default function PlaylistModal({ isOpen, onClose, currentTrack, onSelectT
 
             <div className="space-y-1.5">
               {YOUTUBE_PRESETS.map(track => {
-                const isCurrent = currentTrack.id === track.id || currentTrack.playlistId === track.playlistId;
+                const isCurrent = currentTrack.id === track.id;
                 return (
                   <div
                     key={track.id}
