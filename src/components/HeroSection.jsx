@@ -153,24 +153,36 @@ export default function HeroSection({ currentScene }) {
         </div>
 
         {/* Mobile SFX quick row */}
-        <div className="flex sm:hidden flex-wrap justify-center gap-2 mt-6">
+        <div className="flex lg:hidden flex-wrap justify-center gap-2 mt-4 px-2">
           <button
-            onClick={() => triggerSFX('horn', playDevHorn)}
-            className="glass-pill px-3 py-1.5 rounded-full text-xs text-amber-300 font-hindi"
+            onClick={() => triggerSFX('coffee', playCoffeeSip)}
+            className="glass-pill px-3 py-2 rounded-2xl text-xs text-emerald-300 font-medium flex items-center gap-1.5 active:scale-95 transition-transform"
           >
-            🎺 हॉर्न ओके प्लीज
+            ☕ चहा Break
           </button>
           <button
             onClick={() => triggerSFX('thock', () => playKeyboardThock('thock'))}
-            className="glass-pill px-3 py-1.5 rounded-full text-xs text-cyan-300 font-mono-code"
+            className="glass-pill px-3 py-2 rounded-2xl text-xs text-cyan-300 font-mono-code flex items-center gap-1.5 active:scale-95 transition-transform"
           >
             ⌨️ Thock
           </button>
           <button
             onClick={() => triggerSFX('fix', playFixBugSound)}
-            className="glass-pill px-3 py-1.5 rounded-full text-xs text-purple-300"
+            className="glass-pill px-3 py-2 rounded-2xl text-xs text-purple-300 font-medium flex items-center gap-1.5 active:scale-95 transition-transform"
           >
             🪲 Fix Bug
+          </button>
+          <button
+            onClick={() => triggerSFX('push', playGitPushSound)}
+            className="glass-pill px-3 py-2 rounded-2xl text-xs text-rose-300 font-medium flex items-center gap-1.5 active:scale-95 transition-transform"
+          >
+            🚀 Push
+          </button>
+          <button
+            onClick={() => triggerSFX('horn', playDevHorn)}
+            className="glass-pill px-3 py-2 rounded-2xl text-xs text-amber-300 font-hindi flex items-center gap-1.5 active:scale-95 transition-transform"
+          >
+            🎺 Horn
           </button>
         </div>
 

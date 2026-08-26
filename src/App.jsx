@@ -8,7 +8,7 @@ import PomodoroTimer from './components/PomodoroTimer';
 import PlaylistModal from './components/PlaylistModal';
 import BackgroundPicker from './components/BackgroundPicker';
 import { PLAYLISTS, BACKGROUND_SCENES } from './utils/playlistData';
-import { MAIN_YOUTUBE_PLAYLIST } from './utils/youtubeHelper';
+import { MAIN_YOUTUBE_PLAYLIST, YOUTUBE_PRESETS } from './utils/youtubeHelper';
 import { playKeyboardThock, playDevHorn } from './utils/audioSynth';
 
 export default function App() {
