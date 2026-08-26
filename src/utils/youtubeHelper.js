@@ -1,4 +1,4 @@
-// Helper utility to parse YouTube URLs and manage custom user playlists
+// Helper utility to parse YouTube URLs and manage playlists
 
 export function parseYouTubeUrl(url) {
   if (!url) return null;
@@ -6,13 +6,11 @@ export function parseYouTubeUrl(url) {
   let videoId = null;
   let playlistId = null;
 
-  // Check playlist ID
   const playlistMatch = url.match(/[?&]list=([^#&?]+)/);
   if (playlistMatch) {
     playlistId = playlistMatch[1];
   }
 
-  // Check video ID
   const videoMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
   if (videoMatch) {
     videoId = videoMatch[1];
@@ -29,18 +27,20 @@ export function parseYouTubeUrl(url) {
   };
 }
 
+export const MAIN_YOUTUBE_PLAYLIST = {
+  id: 'yt-main-user-playlist',
+  title: 'Code & Vibe Featured Playlist 🎧',
+  artist: 'Main YouTube Playlist',
+  category: 'Featured Playlist',
+  isYouTube: true,
+  playlistId: 'PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn',
+  cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&auto=format&fit=crop&q=80',
+  url: 'https://www.youtube.com/playlist?list=PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn',
+  duration: 'PLAYLIST 🎶'
+};
+
 export const YOUTUBE_PRESETS = [
-  {
-    id: 'yt-custom-user-playlist',
-    title: 'Featured Vibe YouTube Playlist 🎧',
-    artist: 'Custom Playlist',
-    category: 'YouTube Playlist',
-    isYouTube: true,
-    playlistId: 'PLd4q-VnVZY_A',
-    cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&auto=format&fit=crop&q=80',
-    url: 'https://youtube.com/playlist?list=PLd4q-VnVZY_A',
-    duration: 'PLAYLIST 🎶'
-  },
+  MAIN_YOUTUBE_PLAYLIST,
   {
     id: 'yt-sambata-maaz',
     title: 'MAAZ — SAMBATA (Prod. by Zerochill)',

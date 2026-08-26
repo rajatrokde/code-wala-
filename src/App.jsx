@@ -8,11 +8,12 @@ import PomodoroTimer from './components/PomodoroTimer';
 import PlaylistModal from './components/PlaylistModal';
 import BackgroundPicker from './components/BackgroundPicker';
 import { PLAYLISTS, BACKGROUND_SCENES } from './utils/playlistData';
+import { MAIN_YOUTUBE_PLAYLIST } from './utils/youtubeHelper';
 import { playKeyboardThock, playDevHorn } from './utils/audioSynth';
 
 export default function App() {
   const [currentScene, setCurrentScene] = useState(BACKGROUND_SCENES[0]);
-  const [currentTrack, setCurrentTrack] = useState(PLAYLISTS[0].tracks[0]);
+  const [currentTrack, setCurrentTrack] = useState(MAIN_YOUTUBE_PLAYLIST);
   const [isPlaying, setIsPlaying] = useState(false);
   const [grainEnabled, setGrainEnabled] = useState(false);
   const [visualizerEnabled, setVisualizerEnabled] = useState(true);
