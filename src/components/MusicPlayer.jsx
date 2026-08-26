@@ -33,7 +33,7 @@ export default function MusicPlayer({
   const [isLoop, setIsLoop] = useState(false);
   const [showYtVideo, setShowYtVideo] = useState(false);
 
-  // Sync HTML5 Audio element with play/pause state
+  // Sync HTML5 Audio element with play/pause state for standard MP3 tracks
   useEffect(() => {
     if (currentTrack.isYouTube) return;
 
@@ -118,40 +118,31 @@ export default function MusicPlayer({
         />
       )}
 
-      {/* Floating Picture-in-Picture / Popout YouTube Video Player Modal when active */}
-      {currentTrack.isYouTube && showYtVideo && (
-        <div className="fixed bottom-28 right-6 z-50 glass-panel p-2 rounded-2xl border border-red-500/40 shadow-2xl animate-in fade-in zoom-in duration-200">
-          <div className="flex items-center justify-between px-2 pb-2">
-            <span className="text-xs font-bold text-red-400 flex items-center gap-1.5 font-mono">
-              <Youtube className="w-3.5 h-3.5" /> YouTube Live Video & Playlist
-            </span>
-            <button
-              onClick={() => setShowYtVideo(false)}
-              className="p-1 rounded-full text-zinc-400 hover:text-white hover:bg-white/10"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
+      {/* Persistent Single YouTube Embed Player (Zero unmounting on toggle) */}
+      {currentTrack.isYouTube && (
+        <div className={`fixed transition-all duration-300 z-50 ${
+          showYtVideo 
+            ? 'bottom-24 right-4 sm:right-6 glass-panel p-2 rounded-2xl border border-red-500/40 shadow-2xl scale-100 opacity-100' 
+            : 'bottom-0 right-0 w-0 h-0 overflow-hidden opacity-0 pointer-events-none'
+        }`}>
+          {showYtVideo && (
+            <div className="flex items-center justify-between px-2 pb-2">
+              <span className="text-xs font-bold text-red-400 flex items-center gap-1.5 font-mono">
+                <Youtube className="w-3.5 h-3.5" /> YouTube Video Window
+              </span>
+              <button
+                onClick={() => setShowYtVideo(false)}
+                className="p-1 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          )}
           <iframe
-            key={currentTrack.id + (isPlaying ? '-play' : '-pause')}
-            width="320"
-            height="180"
+            key={currentTrack.id + '-' + (currentTrack.youtubeId || currentTrack.playlistId || '')}
+            width={showYtVideo ? "320" : "1"}
+            height={showYtVideo ? "180" : "1"}
             className="rounded-xl border border-white/10"
-            src={getYouTubeEmbedUrl()}
-            title={currentTrack.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
-      )}
-
-      {/* Hidden YouTube Embed Player when video modal is minimized */}
-      {currentTrack.isYouTube && !showYtVideo && (
-        <div className="hidden">
-          <iframe
-            key={currentTrack.id + (isPlaying ? '-play' : '-pause')}
-            width="200"
-            height="200"
             src={getYouTubeEmbedUrl()}
             title={currentTrack.title}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -236,7 +227,7 @@ export default function MusicPlayer({
             <button
               onClick={onPrevTrack}
               title="Previous Track"
-              className="p-2 rounded-full text-zinc-300 hover:text-white transition-colors cursor-pointer hover:bg-white/5"
+              className="p-2 rounded-full text-zinc-300 hover:text-white transition-colors cursor-pointer hover:bg-white/5 active:scale-95"
             >
               <SkipBack className="w-4 h-4 fill-current" />
             </button>
@@ -253,7 +244,7 @@ export default function MusicPlayer({
             <button
               onClick={() => onNextTrack(isShuffle)}
               title="Next Track (N)"
-              className="p-2 rounded-full text-zinc-300 hover:text-white transition-colors cursor-pointer hover:bg-white/5"
+              className="p-2 rounded-full text-zinc-300 hover:text-white transition-colors cursor-pointer hover:bg-white/5 active:scale-95"
             >
               <SkipForward className="w-4 h-4 fill-current" />
             </button>
