@@ -13,60 +13,7 @@ function getAudioContext() {
   return audioCtx;
 }
 
-// 1. Mechanical Keyboard Thock Sound
-export function playKeyboardThock(profile = 'thock') {
-  try {
-    const ctx = getAudioContext();
-    const now = ctx.currentTime;
-
-    const bufferSize = ctx.sampleRate * 0.04;
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const output = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      output[i] = Math.random() * 2 - 1;
-    }
-
-    const noise = ctx.createBufferSource();
-    noise.buffer = buffer;
-
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.setValueAtTime(profile === 'clicky' ? 2500 : 1200, now);
-    filter.Q.setValueAtTime(3, now);
-
-    const noiseGain = ctx.createGain();
-    noiseGain.gain.setValueAtTime(0.4, now);
-    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
-
-    noise.connect(filter);
-    filter.connect(noiseGain);
-
-    const osc = ctx.createOscillator();
-    const oscGain = ctx.createGain();
-
-    const freq = (profile === 'thock' ? 110 : profile === 'clicky' ? 220 : 150) + (Math.random() * 20 - 10);
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(freq, now);
-    osc.frequency.exponentialRampToValueAtTime(30, now + 0.04);
-
-    oscGain.gain.setValueAtTime(0.7, now);
-    oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
-
-    osc.connect(oscGain);
-
-    noiseGain.connect(ctx.destination);
-    oscGain.connect(ctx.destination);
-
-    noise.start(now);
-    osc.start(now);
-    osc.stop(now + 0.05);
-    noise.stop(now + 0.05);
-  } catch (err) {
-    console.warn("Audio Context Error:", err);
-  }
-}
-
-// 2. Developer / Highway Truck Horn Sound
+// 1. Bus Pressure Horn (Highway Bus Horn)
 export function playDevHorn() {
   try {
     const ctx = getAudioContext();
@@ -79,21 +26,21 @@ export function playDevHorn() {
     osc1.type = 'sawtooth';
     osc2.type = 'square';
 
-    osc1.frequency.setValueAtTime(415, now);
-    osc2.frequency.setValueAtTime(520, now);
+    osc1.frequency.setValueAtTime(370, now); // F#4 Bus pressure horn low
+    osc2.frequency.setValueAtTime(466, now); // A#4 Bus pressure horn high
 
-    osc1.frequency.linearRampToValueAtTime(425, now + 0.15);
-    osc2.frequency.linearRampToValueAtTime(530, now + 0.15);
-    osc1.frequency.linearRampToValueAtTime(415, now + 0.4);
+    osc1.frequency.linearRampToValueAtTime(385, now + 0.15);
+    osc2.frequency.linearRampToValueAtTime(480, now + 0.15);
+    osc1.frequency.linearRampToValueAtTime(370, now + 0.45);
 
     masterGain.gain.setValueAtTime(0.01, now);
-    masterGain.gain.linearRampToValueAtTime(0.4, now + 0.05);
-    masterGain.gain.setValueAtTime(0.4, now + 0.35);
-    masterGain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+    masterGain.gain.linearRampToValueAtTime(0.5, now + 0.05);
+    masterGain.gain.setValueAtTime(0.5, now + 0.4);
+    masterGain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
 
     const lp = ctx.createBiquadFilter();
     lp.type = 'lowpass';
-    lp.frequency.setValueAtTime(1800, now);
+    lp.frequency.setValueAtTime(2200, now);
 
     osc1.connect(lp);
     osc2.connect(lp);
@@ -102,21 +49,121 @@ export function playDevHorn() {
 
     osc1.start(now);
     osc2.start(now);
-    osc1.stop(now + 0.6);
-    osc2.stop(now + 0.6);
+    osc1.stop(now + 0.7);
+    osc2.stop(now + 0.7);
   } catch (e) {
     console.warn(e);
   }
 }
 
-// 3. Fix Bug Crackle Burst + Multi-Cannon Screen Confetti
+export function playKeyboardThock(profile = 'thock') {
+  playTicketPunch();
+}
+export function playConductorWhistle() {
+  try {
+    const ctx = getAudioContext();
+    const now = ctx.currentTime;
+
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc1.type = 'sine';
+    osc2.type = 'triangle';
+
+    osc1.frequency.setValueAtTime(2600, now); // High metal whistle tone
+    osc2.frequency.setValueAtTime(2640, now); // Trill vibrato beat
+
+    gain.gain.setValueAtTime(0.01, now);
+    gain.gain.linearRampToValueAtTime(0.4, now + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+    osc1.connect(gain);
+    osc2.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc1.start(now);
+    osc2.start(now);
+    osc1.stop(now + 0.38);
+    osc2.stop(now + 0.38);
+  } catch (e) {
+    console.warn(e);
+  }
+}
+
+// 3. Ticket Puncher Click (टिकट पंच)
+export function playTicketPunch() {
+  try {
+    const ctx = getAudioContext();
+    const now = ctx.currentTime;
+
+    const bufferSize = ctx.sampleRate * 0.03;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const output = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      output[i] = Math.random() * 2 - 1;
+    }
+
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'highpass';
+    filter.frequency.setValueAtTime(3200, now);
+
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.5, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
+
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    noise.start(now);
+    noise.stop(now + 0.03);
+  } catch (e) {
+    console.warn(e);
+  }
+}
+
+// 4. Diesel Engine Rev Rumble (बस का इंजन)
+export function playBusEngine() {
+  try {
+    const ctx = getAudioContext();
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(55, now);
+    osc.frequency.exponentialRampToValueAtTime(140, now + 0.35);
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(350, now);
+
+    gain.gain.setValueAtTime(0.4, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.5);
+  } catch (e) {
+    console.warn(e);
+  }
+}
+
+// 5. Fix Bug / Destination Arrival Chime + Full Screen Confetti
 export function playFixBugSound() {
   try {
     const ctx = getAudioContext();
     const now = ctx.currentTime;
 
-    // Victory Chime Notes
-    const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // C5, E5, G5, C6, E6
+    const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
     notes.forEach((freq, idx) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
@@ -135,90 +182,26 @@ export function playFixBugSound() {
       osc.stop(now + idx * 0.06 + 0.5);
     });
 
-    // Synthesize crackling pops sound FX
-    for (let i = 0; i < 12; i++) {
-      const popTime = now + Math.random() * 0.4;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(800 + Math.random() * 1600, popTime);
-
-      gain.gain.setValueAtTime(0.15, popTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, popTime + 0.015);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start(popTime);
-      osc.stop(popTime + 0.02);
-    }
-
-    // Trigger full screen crackles & confetti cannons
     confetti({
       particleCount: 120,
       spread: 100,
       origin: { y: 0.5 }
     });
-
-    setTimeout(() => {
-      confetti({
-        particleCount: 60,
-        angle: 60,
-        spread: 70,
-        origin: { x: 0 }
-      });
-      confetti({
-        particleCount: 60,
-        angle: 120,
-        spread: 70,
-        origin: { x: 1 }
-      });
-    }, 150);
   } catch (e) {
     console.warn(e);
   }
 }
 
-// 4. Git Push / Rocket Sound
 export function playGitPushSound() {
-  try {
-    const ctx = getAudioContext();
-    const now = ctx.currentTime;
-
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(150, now);
-    osc.frequency.exponentialRampToValueAtTime(1200, now + 0.3);
-
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(800, now);
-    filter.frequency.linearRampToValueAtTime(3000, now + 0.3);
-
-    gain.gain.setValueAtTime(0.3, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-
-    osc.connect(filter);
-    filter.connect(gain);
-    gain.connect(ctx.destination);
-
-    osc.start(now);
-    osc.stop(now + 0.45);
-  } catch (e) {
-    console.warn(e);
-  }
+  playBusEngine();
 }
 
-// 5. "Chal Chai Peele" + Chai Tapri Clink Sound
+// 6. Dhabha Chai + Marathi Voice "चल चहा पिऊया!"
 export function playCoffeeSip() {
   try {
     const ctx = getAudioContext();
     const now = ctx.currentTime;
 
-    // High frequency tea cup glass clink sound
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
 
@@ -235,39 +218,11 @@ export function playCoffeeSip() {
     osc.start(now);
     osc.stop(now + 0.22);
 
-    // Filtered tea pour sizzle
-    const bufferSize = ctx.sampleRate * 0.25;
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const output = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      output[i] = (Math.random() * 2 - 1) * Math.sin(i / 80);
-    }
-
-    const noise = ctx.createBufferSource();
-    noise.buffer = buffer;
-
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.setValueAtTime(1200, now);
-    filter.Q.setValueAtTime(4, now);
-
-    const noiseGain = ctx.createGain();
-    noiseGain.gain.setValueAtTime(0.2, now);
-    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-
-    noise.connect(filter);
-    filter.connect(noiseGain);
-    noiseGain.connect(ctx.destination);
-
-    noise.start(now);
-    noise.stop(now + 0.28);
-
-    // Speak "चल चहा पिऊया!" (Marathi) phrase in warm female voice using Web Speech API
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance("चल चहा पिऊया!");
       utterance.rate = 1.05;
-      utterance.pitch = 1.45; // Female voice pitch shift
+      utterance.pitch = 1.45;
       utterance.lang = 'mr-IN';
 
       const voices = window.speechSynthesis.getVoices();
