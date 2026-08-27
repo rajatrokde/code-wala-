@@ -343,12 +343,15 @@ export default function MusicPlayer({
             {/* Toggle Song List Panel Button */}
             <button
               onClick={() => setShowSongList(!showSongList)}
-              title={showSongList ? "Close Songs List Panel" : "Open Songs List Panel (Click Song Title to Play)"}
-              className={`p-2 rounded-full text-xs transition-all cursor-pointer ${
-                showSongList ? 'text-amber-300 bg-amber-500/20 border border-amber-500/40 shadow-lg' : 'text-zinc-300 hover:text-white'
+              title={showSongList ? "Close Songs List Panel" : "Open All Songs List Panel (Click Song Title to Play)"}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold font-mono transition-all cursor-pointer flex items-center gap-1.5 active:scale-95 ${
+                showSongList 
+                  ? 'text-zinc-950 bg-amber-400 border border-amber-300 shadow-lg shadow-amber-400/20' 
+                  : 'glass-pill text-amber-300 hover:text-white border-amber-500/30 hover:border-amber-400'
               }`}
             >
-              <Music className="w-4 h-4 text-amber-400" />
+              <Music className="w-3.5 h-3.5" />
+              <span>🎶 All Songs</span>
             </button>
 
             {/* Toggle YouTube Video Display Button */}
