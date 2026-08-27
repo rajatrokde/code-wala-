@@ -12,7 +12,10 @@ import {
   Disc,
   Youtube,
   Tv,
-  X
+  X,
+  Search,
+  Music,
+  Check
 } from 'lucide-react';
 
 export default function MusicPlayer({ 
@@ -22,9 +25,13 @@ export default function MusicPlayer({
   onNextTrack, 
   onPrevTrack, 
   onOpenPlaylist,
-  visualizerEnabled
+  visualizerEnabled,
+  allTracks = [],
+  onSelectTrack
 }) {
   const audioRef = useRef(null);
+  const iframeRef = useRef(null);
+  
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.8);
@@ -32,8 +39,8 @@ export default function MusicPlayer({
   const [isShuffle, setIsShuffle] = useState(false);
   const [isLoop, setIsLoop] = useState(false);
   const [showYtVideo, setShowYtVideo] = useState(false);
-
-  const iframeRef = useRef(null);
+  const [showSongList, setShowSongList] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const postYouTubeCommand = (func, args = '') => {
     try {
@@ -148,6 +155,11 @@ export default function MusicPlayer({
     }
   };
 
+  const filteredTracks = allTracks.filter(track => 
+    track.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    track.artist.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="w-full flex justify-center px-4 pb-6 z-30 select-none relative">
       
@@ -202,6 +214,82 @@ export default function MusicPlayer({
         </div>
       )}
 
+      {/* Floating Vertical Song List Panel (Interactive Queue Drawer) */}
+      {showSongList && (
+        <div className="fixed bottom-28 right-4 sm:right-12 z-50 glass-panel w-full max-w-sm p-4 rounded-3xl border border-amber-500/30 shadow-2xl animate-in fade-in zoom-in duration-200 flex flex-col max-h-[420px]">
+          
+          <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-amber-500/20 text-amber-300">
+                <Music className="w-4 h-4" />
+              </div>
+              <h3 className="text-sm font-bold text-white">Songs List (Click to Play)</h3>
+            </div>
+            <button
+              onClick={() => setShowSongList(false)}
+              className="p-1 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Quick Search Input */}
+          <div className="relative mb-3">
+            <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search song title or artist..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-white/5 text-xs text-white placeholder-zinc-500 pl-8 pr-3 py-2 rounded-xl border border-white/10 focus:outline-none focus:border-amber-400"
+            />
+          </div>
+
+          {/* Songs List */}
+          <div className="overflow-y-auto space-y-1.5 pr-1 flex-1">
+            {filteredTracks.map((track, idx) => {
+              const isSelected = currentTrack.id === track.id;
+              return (
+                <div
+                  key={track.id + '-' + idx}
+                  onClick={() => {
+                    if (onSelectTrack) onSelectTrack(track);
+                  }}
+                  className={`p-2 rounded-2xl flex items-center justify-between transition-all cursor-pointer border ${
+                    isSelected 
+                      ? 'bg-amber-500/20 border-amber-400 text-white shadow-md' 
+                      : 'glass-pill border-transparent hover:bg-white/10 text-zinc-300'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <img 
+                      src={track.cover} 
+                      alt={track.title} 
+                      className="w-9 h-9 rounded-xl object-cover shrink-0" 
+                    />
+                    <div className="min-w-0">
+                      <div className="text-xs font-semibold truncate flex items-center gap-1.5">
+                        <span>{track.title}</span>
+                        {isSelected && <Check className="w-3 h-3 text-amber-400 shrink-0" />}
+                      </div>
+                      <div className="text-[10px] text-zinc-400 truncate">{track.artist}</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-[10px] font-mono text-amber-400 shrink-0">
+                    <span>{track.duration}</span>
+                    <div className={`p-1.5 rounded-full ${isSelected ? 'bg-amber-400 text-zinc-950' : 'bg-white/10 text-zinc-300'}`}>
+                      <Play className="w-3 h-3 fill-current ml-0.5" />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
+      )}
+
       {/* Main Glassmorphic Floating Audio Player Bar */}
       <div className="glass-panel w-full max-w-2xl px-5 py-3.5 rounded-3xl shadow-2xl flex flex-col gap-2.5 transition-all duration-300 border border-white/15">
         
@@ -252,6 +340,17 @@ export default function MusicPlayer({
           {/* Controls & Volume */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             
+            {/* Toggle Song List Panel Button */}
+            <button
+              onClick={() => setShowSongList(!showSongList)}
+              title={showSongList ? "Close Songs List Panel" : "Open Songs List Panel (Click Song Title to Play)"}
+              className={`p-2 rounded-full text-xs transition-all cursor-pointer ${
+                showSongList ? 'text-amber-300 bg-amber-500/20 border border-amber-500/40 shadow-lg' : 'text-zinc-300 hover:text-white'
+              }`}
+            >
+              <Music className="w-4 h-4 text-amber-400" />
+            </button>
+
             {/* Toggle YouTube Video Display Button */}
             {currentTrack.isYouTube && (
               <button

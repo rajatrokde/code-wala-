@@ -105,6 +105,11 @@ export default function App() {
         onPrevTrack={handlePrevTrack}
         onOpenPlaylist={() => setShowPlaylist(true)}
         visualizerEnabled={visualizerEnabled}
+        allTracks={allTracks}
+        onSelectTrack={(track) => {
+          setCurrentTrack(track);
+          setIsPlaying(true);
+        }}
       />
 
       {/* Modals & Drawers */}
