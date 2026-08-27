@@ -28,35 +28,24 @@ export function parseYouTubeUrl(url) {
 }
 
 export const MAIN_YOUTUBE_PLAYLIST = {
-  id: 'yt-main-user-playlist',
-  title: '▶️ Play Full YouTube Playlist Series',
-  artist: 'Full YouTube Playlist (PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn)',
-  category: 'Full Playlist',
+  id: 'yt-song-1',
+  title: '🎵 1. MAAZ — SAMBATA (Prod. by Zerochill)',
+  artist: 'SAMBATA',
+  category: 'Playlist Song 1',
   isYouTube: true,
+  youtubeId: 'wIL7KzTLxXU',
   playlistId: 'PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn',
-  cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&auto=format&fit=crop&q=80',
-  url: 'https://www.youtube.com/playlist?list=PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn',
-  duration: 'ALL SONGS 🎶'
+  cover: 'https://img.youtube.com/vi/wIL7KzTLxXU/hqdefault.jpg',
+  url: 'https://www.youtube.com/watch?v=wIL7KzTLxXU',
+  duration: '3:15'
 };
 
-// All songs inside the playlist listed individually song by song
+// All individual songs inside YouTube Playlist PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn listed line-by-line
 export const YOUTUBE_PRESETS = [
   MAIN_YOUTUBE_PLAYLIST,
   {
-    id: 'yt-song-1',
-    title: '1. MAAZ — SAMBATA (Prod. by Zerochill)',
-    artist: 'SAMBATA',
-    category: 'Playlist Song 1',
-    isYouTube: true,
-    youtubeId: 'wIL7KzTLxXU',
-    playlistId: 'PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn',
-    cover: 'https://img.youtube.com/vi/wIL7KzTLxXU/hqdefault.jpg',
-    url: 'https://www.youtube.com/watch?v=wIL7KzTLxXU',
-    duration: '3:15'
-  },
-  {
     id: 'yt-song-2',
-    title: '2. Lofi Girl — Beats to Relax/Study to',
+    title: '🎵 2. Lofi Girl — Beats to Relax/Study to',
     artist: 'Lofi Girl',
     category: 'Playlist Song 2',
     isYouTube: true,
@@ -68,7 +57,7 @@ export const YOUTUBE_PRESETS = [
   },
   {
     id: 'yt-song-3',
-    title: '3. Synthwave Radio 24/7 Chill Synth',
+    title: '🎵 3. Synthwave Radio 24/7 Chill Synth',
     artist: 'Lofi Girl Synthwave',
     category: 'Playlist Song 3',
     isYouTube: true,
@@ -80,7 +69,7 @@ export const YOUTUBE_PRESETS = [
   },
   {
     id: 'yt-song-4',
-    title: '4. Bollywood Lofi Chill Mix',
+    title: '🎵 4. Bollywood Lofi Chill Mix',
     artist: 'Retro India Vibe',
     category: 'Playlist Song 4',
     isYouTube: true,
@@ -92,7 +81,7 @@ export const YOUTUBE_PRESETS = [
   },
   {
     id: 'yt-song-5',
-    title: '5. Midnight Code Flow (Chill Lo-Fi Beat)',
+    title: '🎵 5. Midnight Code Flow (Chill Lo-Fi Beat)',
     artist: 'Code & Chill Studio',
     category: 'Playlist Song 5',
     isYouTube: true,
@@ -101,5 +90,28 @@ export const YOUTUBE_PRESETS = [
     cover: 'https://img.youtube.com/vi/5qap5aO4i9A/hqdefault.jpg',
     url: 'https://www.youtube.com/watch?v=5qap5aO4i9A',
     duration: '2:40'
+  },
+  {
+    id: 'yt-song-6',
+    title: '🎵 6. Chai Tapri Sitar & Highway Wind',
+    artist: 'Dhabha Beats Collective',
+    category: 'Playlist Song 6',
+    isYouTube: true,
+    youtubeId: '1FU38s4LGQ4',
+    playlistId: 'PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn',
+    cover: 'https://img.youtube.com/vi/1FU38s4LGQ4/hqdefault.jpg',
+    url: 'https://www.youtube.com/watch?v=1FU38s4LGQ4',
+    duration: '3:45'
+  },
+  {
+    id: 'yt-song-7',
+    title: '▶️ Full YouTube Playlist Series (Autoplay All)',
+    artist: 'Full YouTube Playlist (PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn)',
+    category: 'Full Playlist',
+    isYouTube: true,
+    playlistId: 'PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn',
+    cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&auto=format&fit=crop&q=80',
+    url: 'https://www.youtube.com/playlist?list=PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn',
+    duration: 'ALL SONGS 🎶'
   }
 ];
