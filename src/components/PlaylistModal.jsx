@@ -1,24 +1,38 @@
-import React from 'react';
-import { X, Music, Play, Check } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Music, Play, Check, ChevronDown, ChevronUp, Disc, Youtube } from 'lucide-react';
 import { PLAYLISTS } from '../utils/playlistData';
 import { YOUTUBE_PRESETS } from '../utils/youtubeHelper';
 
 export default function PlaylistModal({ isOpen, onClose, currentTrack, onSelectTrack }) {
+  // Store expanded state for playlists (all expanded by default)
+  const [expandedSection, setExpandedSection] = useState({
+    youtube: true,
+    'old-hindi-lofi': true,
+    'cyberpunk-synth': true
+  });
+
   if (!isOpen) return null;
 
+  const toggleSection = (id) => {
+    setExpandedSection(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/65 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
       <div className="glass-panel w-full max-w-lg p-6 rounded-3xl border border-white/15 shadow-2xl relative max-h-[85vh] flex flex-col animate-in fade-in zoom-in duration-200">
         
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-white/10 shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-amber-500/20 text-amber-400">
+            <div className="p-2.5 rounded-2xl bg-amber-500/20 text-amber-400">
               <Music className="w-5 h-5" />
             </div>
             <div>
               <h2 className="text-lg font-bold text-white">Dev Vibe Song Section & Playlists</h2>
-              <p className="text-xs text-zinc-400">Curated beats & featured YouTube playlists for deep work</p>
+              <p className="text-xs text-zinc-400">Click any playlist to view & play individual songs inside</p>
             </div>
           </div>
           <button 
@@ -29,71 +43,40 @@ export default function PlaylistModal({ isOpen, onClose, currentTrack, onSelectT
           </button>
         </div>
 
-        <div className="overflow-y-auto py-4 space-y-6 pr-1 flex-1">
+        <div className="overflow-y-auto py-4 space-y-5 pr-1 flex-1">
           
-          {/* Featured YouTube Playlists & Streams Section */}
-          <div className="space-y-2.5">
-            <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider font-mono flex items-center gap-2">
-              <span>Featured YouTube Playlists</span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] bg-amber-500/20 text-amber-300">
-                YouTube Vibes
-              </span>
-            </h3>
-
-            <div className="space-y-1.5">
-              {YOUTUBE_PRESETS.map(track => {
-                const isCurrent = currentTrack.id === track.id;
-                return (
-                  <div
-                    key={track.id}
-                    onClick={() => {
-                      onSelectTrack(track);
-                      onClose();
-                    }}
-                    className={`p-2.5 rounded-2xl flex items-center justify-between transition-all cursor-pointer border ${
-                      isCurrent 
-                        ? 'bg-amber-500/20 border-amber-400 text-white shadow-lg' 
-                        : 'glass-pill border-transparent hover:bg-white/10 text-zinc-300'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <img src={track.cover} alt={track.title} className="w-10 h-10 rounded-xl object-cover shrink-0" />
-                      <div className="min-w-0">
-                        <div className="text-sm font-semibold truncate flex items-center gap-2">
-                          <span>{track.title}</span>
-                          {isCurrent && <Check className="w-3.5 h-3.5 text-amber-400 shrink-0" />}
-                        </div>
-                        <div className="text-xs text-zinc-400 truncate">{track.artist}</div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3 text-xs font-mono text-amber-400 shrink-0">
-                      <span>{track.duration}</span>
-                      <div className="p-2 rounded-full bg-amber-500 text-zinc-950">
-                        <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Regular Audio Playlists Section */}
-          {PLAYLISTS.map(playlist => (
-            <div key={playlist.id} className="space-y-2.5">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-zinc-200 uppercase tracking-wider font-mono flex items-center gap-2">
-                  <span>{playlist.name}</span>
-                  <span className="px-2 py-0.5 rounded-full text-[10px] bg-white/10 text-emerald-300 font-sans font-normal">
-                    {playlist.badge}
-                  </span>
-                </h3>
+          {/* Featured YouTube Playlist Card & Song List */}
+          <div className="rounded-2xl border border-amber-500/30 bg-amber-500/5 overflow-hidden transition-all">
+            
+            {/* Playlist Header Card */}
+            <div 
+              onClick={() => toggleSection('youtube')}
+              className="p-3.5 flex items-center justify-between cursor-pointer hover:bg-amber-500/10 transition-colors select-none"
+            >
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-amber-500/20 text-amber-300">
+                  <Youtube className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-amber-300 flex items-center gap-2">
+                    Featured YouTube Vibe Playlist
+                    <span className="px-2 py-0.5 rounded-full text-[10px] bg-amber-500/20 text-amber-200 border border-amber-500/30">
+                      {YOUTUBE_PRESETS.length} Songs
+                    </span>
+                  </h3>
+                  <p className="text-xs text-amber-200/70">PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn</p>
+                </div>
               </div>
-              <p className="text-xs text-zinc-400">{playlist.description}</p>
 
-              <div className="space-y-1.5 mt-2">
-                {playlist.tracks.map(track => {
+              <button className="p-1 rounded-full text-amber-300 hover:bg-white/10">
+                {expandedSection['youtube'] ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+              </button>
+            </div>
+
+            {/* Songs List inside Playlist */}
+            {expandedSection['youtube'] && (
+              <div className="p-2 pt-0 space-y-1.5 border-t border-amber-500/20 bg-black/40">
+                {YOUTUBE_PRESETS.map((track, idx) => {
                   const isCurrent = currentTrack.id === track.id;
                   return (
                     <div
@@ -102,39 +85,115 @@ export default function PlaylistModal({ isOpen, onClose, currentTrack, onSelectT
                         onSelectTrack(track);
                         onClose();
                       }}
-                      className={`p-2.5 rounded-2xl flex items-center justify-between transition-all cursor-pointer border ${
+                      className={`p-2.5 rounded-xl flex items-center justify-between transition-all cursor-pointer border ${
                         isCurrent 
-                          ? 'bg-white/15 border-emerald-500/50 text-white shadow-lg' 
+                          ? 'bg-amber-500/25 border-amber-400 text-white shadow-md' 
                           : 'glass-pill border-transparent hover:bg-white/10 text-zinc-300'
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <img 
-                          src={track.cover} 
-                          alt={track.title} 
-                          className="w-10 h-10 rounded-xl object-cover shrink-0"
-                        />
+                        <img src={track.cover} alt={track.title} className="w-9 h-9 rounded-xl object-cover shrink-0" />
                         <div className="min-w-0">
-                          <div className="text-sm font-semibold truncate flex items-center gap-2">
+                          <div className="text-xs font-semibold truncate flex items-center gap-1.5">
                             <span>{track.title}</span>
-                            {isCurrent && <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />}
+                            {isCurrent && <Check className="w-3.5 h-3.5 text-amber-400 shrink-0" />}
                           </div>
-                          <div className="text-xs text-zinc-400 truncate">{track.artist}</div>
+                          <div className="text-[10px] text-zinc-400 truncate">{track.artist}</div>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-3 text-xs font-mono text-zinc-400 shrink-0">
+                      <div className="flex items-center gap-2.5 text-xs font-mono text-amber-300 shrink-0">
                         <span>{track.duration}</span>
-                        <div className="p-2 rounded-full bg-white/10 text-white group-hover:scale-105">
-                          <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
+                        <div className={`p-1.5 rounded-full ${isCurrent ? 'bg-amber-400 text-zinc-950' : 'bg-white/10 text-white'}`}>
+                          <Play className="w-3 h-3 fill-current ml-0.5" />
                         </div>
                       </div>
                     </div>
                   );
                 })}
               </div>
-            </div>
-          ))}
+            )}
+          </div>
+
+          {/* Regular Audio Playlists with Expandable Songs List */}
+          {PLAYLISTS.map(playlist => {
+            const isExpanded = expandedSection[playlist.id];
+            return (
+              <div key={playlist.id} className="rounded-2xl border border-white/10 bg-white/5 overflow-hidden transition-all">
+                
+                {/* Playlist Header Card */}
+                <div 
+                  onClick={() => toggleSection(playlist.id)}
+                  className="p-3.5 flex items-center justify-between cursor-pointer hover:bg-white/10 transition-colors select-none"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-300">
+                      <Disc className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                        {playlist.name}
+                        <span className="px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-normal">
+                          {playlist.tracks.length} Songs
+                        </span>
+                      </h3>
+                      <p className="text-xs text-zinc-400">{playlist.description}</p>
+                    </div>
+                  </div>
+
+                  <button className="p-1 rounded-full text-zinc-400 hover:bg-white/10">
+                    {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                  </button>
+                </div>
+
+                {/* Songs List inside Playlist */}
+                {isExpanded && (
+                  <div className="p-2 pt-0 space-y-1.5 border-t border-white/10 bg-black/40">
+                    {playlist.tracks.map(track => {
+                      const isCurrent = currentTrack.id === track.id;
+                      return (
+                        <div
+                          key={track.id}
+                          onClick={() => {
+                            onSelectTrack(track);
+                            onClose();
+                          }}
+                          className={`p-2.5 rounded-xl flex items-center justify-between transition-all cursor-pointer border ${
+                            isCurrent 
+                              ? 'bg-emerald-500/25 border-emerald-400 text-white shadow-md' 
+                              : 'glass-pill border-transparent hover:bg-white/10 text-zinc-300'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3 min-w-0">
+                            <img 
+                              src={track.cover} 
+                              alt={track.title} 
+                              className="w-9 h-9 rounded-xl object-cover shrink-0"
+                            />
+                            <div className="min-w-0">
+                              <div className="text-xs font-semibold truncate flex items-center gap-1.5">
+                                <span>{track.title}</span>
+                                {isCurrent && <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />}
+                              </div>
+                              <div className="text-[10px] text-zinc-400 truncate">{track.artist}</div>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2.5 text-xs font-mono text-emerald-300 shrink-0">
+                            <span>{track.duration}</span>
+                            <div className={`p-1.5 rounded-full ${isCurrent ? 'bg-emerald-400 text-zinc-950' : 'bg-white/10 text-white'}`}>
+                              <Play className="w-3 h-3 fill-current ml-0.5" />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+              </div>
+            );
+          })}
 
         </div>
 
