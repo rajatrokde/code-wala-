@@ -67,7 +67,7 @@ export default function Header({
           <span className="relative inline-flex rounded-full h-2 sm:h-2.5 w-2 sm:w-2.5 bg-emerald-500"></span>
         </span>
         <span className="font-semibold text-emerald-400">{activeDevs.toLocaleString()}</span>
-        <span className="text-zinc-400 lowercase hidden xs:inline">travellers on the highway</span>
+        <span className="text-zinc-400 lowercase hidden xs:inline">devs coding on the highway</span>
       </div>
 
       {/* Right: Quick Action Controls */}
