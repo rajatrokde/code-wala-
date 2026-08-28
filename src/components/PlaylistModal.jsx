@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Music, Play, Check, ChevronDown, ChevronUp, Disc, Youtube } from 'lucide-react';
+import { X, Music, Play, Check, ChevronDown, ChevronUp, Disc, Youtube, ListMusic } from 'lucide-react';
 import { PLAYLISTS } from '../utils/playlistData';
 import { YOUTUBE_PRESETS } from '../utils/youtubeHelper';
 
@@ -21,18 +21,18 @@ export default function PlaylistModal({ isOpen, onClose, currentTrack, onSelectT
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
-      <div className="glass-panel w-full max-w-lg p-6 rounded-3xl border border-white/15 shadow-2xl relative max-h-[85vh] flex flex-col animate-in fade-in zoom-in duration-200">
+    <div className="fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center p-4">
+      <div className="glass-panel w-full max-w-lg p-6 rounded-3xl border border-white/15 shadow-2xl relative max-h-[88vh] flex flex-col animate-in fade-in zoom-in duration-200">
         
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-white/10 shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="p-2.5 rounded-2xl bg-amber-500/20 text-amber-400">
-              <Music className="w-5 h-5" />
+              <ListMusic className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">Dev Vibe Song Section & Playlists</h2>
-              <p className="text-xs text-zinc-400">Click any playlist to view & play individual songs inside</p>
+              <h2 className="text-lg font-bold text-white">Playlist Songs List (Select Song by Song)</h2>
+              <p className="text-xs text-zinc-400">Select any individual song inside the playlist to play</p>
             </div>
           </div>
           <button 
@@ -46,25 +46,24 @@ export default function PlaylistModal({ isOpen, onClose, currentTrack, onSelectT
         <div className="overflow-y-auto py-4 space-y-5 pr-1 flex-1">
           
           {/* Featured YouTube Playlist Card & Song List */}
-          <div className="rounded-2xl border border-amber-500/30 bg-amber-500/5 overflow-hidden transition-all">
+          <div className="rounded-2xl border border-amber-500/40 bg-amber-500/10 overflow-hidden transition-all shadow-lg">
             
             {/* Playlist Header Card */}
             <div 
               onClick={() => toggleSection('youtube')}
-              className="p-3.5 flex items-center justify-between cursor-pointer hover:bg-amber-500/10 transition-colors select-none"
+              className="p-3.5 flex items-center justify-between cursor-pointer hover:bg-amber-500/20 transition-colors select-none"
             >
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-amber-500/20 text-amber-300">
+                <div className="p-2 rounded-xl bg-amber-500/30 text-amber-300">
                   <Youtube className="w-5 h-5" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-amber-300 flex items-center gap-2">
-                    Featured YouTube Vibe Playlist
-                    <span className="px-2 py-0.5 rounded-full text-[10px] bg-amber-500/20 text-amber-200 border border-amber-500/30">
-                      {YOUTUBE_PRESETS.length} Songs
-                    </span>
+                    YouTube Playlist: PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn
                   </h3>
-                  <p className="text-xs text-amber-200/70">PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn</p>
+                  <p className="text-xs text-amber-200/80 font-mono">
+                    📋 List Format ({YOUTUBE_PRESETS.length} Songs Inside)
+                  </p>
                 </div>
               </div>
 
@@ -73,9 +72,12 @@ export default function PlaylistModal({ isOpen, onClose, currentTrack, onSelectT
               </button>
             </div>
 
-            {/* Songs List inside Playlist */}
+            {/* Songs List inside Playlist (List Format) */}
             {expandedSection['youtube'] && (
-              <div className="p-2 pt-0 space-y-1.5 border-t border-amber-500/20 bg-black/40">
+              <div className="p-2.5 pt-1 space-y-1.5 border-t border-amber-500/20 bg-black/60">
+                <div className="px-2 py-1 text-[11px] font-mono text-amber-400/90 uppercase tracking-wider font-semibold">
+                  Songs List inside PLBGdAjPuC6fTe8aR5jTHZ9ntRdVJXm-wn:
+                </div>
                 {YOUTUBE_PRESETS.map((track, idx) => {
                   const isCurrent = currentTrack.id === track.id;
                   return (
@@ -87,8 +89,8 @@ export default function PlaylistModal({ isOpen, onClose, currentTrack, onSelectT
                       }}
                       className={`p-2.5 rounded-xl flex items-center justify-between transition-all cursor-pointer border ${
                         isCurrent 
-                          ? 'bg-amber-500/25 border-amber-400 text-white shadow-md' 
-                          : 'glass-pill border-transparent hover:bg-white/10 text-zinc-300'
+                          ? 'bg-amber-500/30 border-amber-400 text-white shadow-md' 
+                          : 'glass-pill border-transparent hover:bg-white/10 text-zinc-200'
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
