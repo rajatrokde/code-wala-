@@ -1,0 +1,5 @@
+azure_location      = "East US"
+resource_group_name = "rg-codewala-prod"
+app_name            = "codewala"
+environment         = "production"
+container_image     = "mcr.microsoft.com/azuredocs/aci-helloworld:latest"
