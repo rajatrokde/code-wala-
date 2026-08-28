@@ -33,7 +33,7 @@ export default function App() {
       setCurrentTrack(allTracks[randomIdx]);
       setIsPlaying(true);
     } else {
-      const currentIdx = allTracks.findIndex(t => t.id === currentTrack.id || (t.playlistId && t.playlistId === currentTrack.playlistId));
+      const currentIdx = allTracks.findIndex(t => t.id === currentTrack.id);
       const nextIdx = currentIdx >= 0 ? (currentIdx + 1) % allTracks.length : 0;
       setCurrentTrack(allTracks[nextIdx]);
       setIsPlaying(true);
@@ -41,7 +41,7 @@ export default function App() {
   };
 
   const handlePrevTrack = () => {
-    const currentIdx = allTracks.findIndex(t => t.id === currentTrack.id || (t.playlistId && t.playlistId === currentTrack.playlistId));
+    const currentIdx = allTracks.findIndex(t => t.id === currentTrack.id);
     const prevIdx = currentIdx >= 0 ? (currentIdx - 1 + allTracks.length) % allTracks.length : 0;
     setCurrentTrack(allTracks[prevIdx]);
     setIsPlaying(true);

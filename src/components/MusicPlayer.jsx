@@ -106,16 +106,10 @@ export default function MusicPlayer({
   };
 
   const handleNext = () => {
-    if (currentTrack.isYouTube && currentTrack.playlistId) {
-      postYouTubeCommand('nextVideo');
-    }
     onNextTrack(isShuffle);
   };
 
   const handlePrev = () => {
-    if (currentTrack.isYouTube && currentTrack.playlistId) {
-      postYouTubeCommand('previousVideo');
-    }
     onPrevTrack();
   };
 
