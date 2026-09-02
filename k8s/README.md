@@ -26,21 +26,6 @@ This directory contains production-grade Kubernetes (K8s) manifests and automate
 
 ---
 
-## ⚡ 1-Click Automated Setup
-
-### Windows (PowerShell)
-```powershell
-.\k8s\deploy-local.ps1
-```
-
-### Linux / macOS / WSL (Bash)
-```bash
-chmod +x ./k8s/deploy-local.sh
-./k8s/deploy-local.sh
-```
-
----
-
 ## 🛠️ Manual Deployment Steps
 
 ### 1. Build Local Container Image
