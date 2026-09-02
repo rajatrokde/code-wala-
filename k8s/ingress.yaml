@@ -4,10 +4,8 @@ metadata:
   name: dev-vibes-ingress
   namespace: dev-vibes
   annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
 spec:
+  ingressClassName: nginx
   rules:
     - host: dev-vibes.local # Replace with your production domain name (e.g., dev-vibes.com)
       http:
