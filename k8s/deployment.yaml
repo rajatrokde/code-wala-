@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: dev-vibes
-          image: dev-vibes:latest # Replace with your container registry image (e.g. docker.io/username/dev-vibes:latest)
+          image: rajatrokde/codewala:v1 # Replace with your container registry image (e.g. docker.io/username/dev-vibes:latest)
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
